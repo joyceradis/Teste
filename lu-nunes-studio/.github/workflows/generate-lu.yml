@@ -1,0 +1,39 @@
+name: Generate Lu video
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_url:
+        description: 'Public URL for the canonical Lu image'
+        required: true
+      scene:
+        description: 'What Lu does in this shot'
+        required: true
+        default: 'Lu records a casual luxury lifestyle vlog in a modern home in Greater Vitória, Brazil.'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: lu-nunes-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Generate image-to-video
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+          LU_IMAGE_URL: ${{ inputs.image_url }}
+          LU_SCENE: ${{ inputs.scene }}
+        run: npm run generate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lu-video-result
+          path: lu-nunes-studio/output/result.json
