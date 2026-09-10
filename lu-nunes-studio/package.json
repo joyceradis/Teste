@@ -1,0 +1,12 @@
+{
+  "name": "lu-nunes-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "generate": "node scripts/generate.mjs"
+  },
+  "dependencies": {
+    "@fal-ai/client": "^1.6.2"
+  }
+}
